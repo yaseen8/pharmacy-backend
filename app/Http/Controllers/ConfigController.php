@@ -18,14 +18,35 @@ class ConfigController extends Controller
     public function check_product_qty()
     {
         $data = array();
-        $qty = $this->model->first()->check_qty;
-        $inventory = Inventory::with('quantity_history')->get();
+        $inventory = Inventory::with('quantity_history','company')->get();
         foreach($inventory as $i){
             $check = 0;
+            $min_qty = $i->min_qty;
             foreach($i['quantity_history'] as $q){
                 $check = $check + (int)($q['qty']);
             }
-            if($check < $qty){
+            if($check < $min_qty){
+                $data[] = $i;
+            }
+        }
+        return response()->json($data, 200);
+    }
+
+    public function check_minimum_by_company(Request $reqest)
+    {
+        $data = array();
+        $inventory = Inventory::with('quantity_history','company')
+                        ->whereHas('company', function ($query) {
+                            $query->where('name', 'like', \Request::input('name') . '%');
+                        })
+                        ->get();
+        foreach($inventory as $i){
+            $check = 0;
+            $min_qty = $i->min_qty;
+            foreach($i['quantity_history'] as $q){
+                $check = $check + (int)($q['qty']);
+            }
+            if($check < $min_qty){
                 $data[] = $i;
             }
         }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Inventory extends Model
 {
     public $table='inventory';
-    protected $fillable=['name','type','pack','strength', 'fk_company_id'];
+    protected $fillable=['name','type','pack','strength', 'fk_company_id','min_qty','salt'];
     public $timestamps = false;
     public $appends=['sale_price', 'total_quantity', 'sale_id'];
 

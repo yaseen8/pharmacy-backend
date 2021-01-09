@@ -49,6 +49,8 @@ class InventoryController extends Controller
             'pack' => 'required',
             'strength' => 'required',
             'fk_company_id' => 'required',
+            'min_qty' => 'required',
+            'salt' => 'required'
         ]);
         $check = Inventory::where('name', $request->input('name'))
             ->where('type', $request->input('type'))
@@ -64,6 +66,8 @@ class InventoryController extends Controller
                     'type' => $request->input('type'),
                     'pack' => $request->input('pack'),
                     'strength' => $request->input('strength'),
+                    'min_qty' => $request->input('min_qty'),
+                    'salt' => $request->input('salt'),
                     'fk_company_id' => $request->input('fk_company_id'),
                 ]
             );
@@ -80,6 +84,8 @@ class InventoryController extends Controller
             'pack' => 'required',
             'strength' => 'required',
             'fk_company_id' => 'required',
+            'min_qty' => 'required',
+            'salt' => 'required'
         ]);
         $check = Inventory::where('name', $request->input('name'))
             ->where('type', $request->input('type'))
@@ -273,7 +279,7 @@ class InventoryController extends Controller
     public function search_name(Request $request)
     {
         $name = $request->input('name');
-        $inv = $this->model::with('sale_price_history', 'quantity_history', 'company')->where('name', 'like', $name . '%')->paginate(50);
+        $inv = $this->model::with('sale_price_history', 'quantity_history', 'company')->where('name', 'like', $name . '%')->orWhere('salt', 'like', $name . '%')->paginate(50);
         return response()->json($inv, 200);
     }
 }

@@ -15,6 +15,13 @@
 //     return $request->user();
 // });
 
+ // Login And User
+
+Route::post('/login', 'AuthController@login')->name('login');
+Route::post('/logout', 'AuthController@logout');
+Route::get('/users/logged_in_user', 'UserController@loggedInUser');
+Route::get('/users/select_list', 'UserController@user_select_list');
+
 //company
 Route::get('/company', 'CompanyController@index');
 Route::post('/company', 'CompanyController@store');
@@ -98,8 +105,30 @@ Route::get('/check_message', 'MessageController@send');
 // Configuration
 
 Route::get('/check_qty', 'ConfigController@check_product_qty');
+Route::get('/check_qty_by_company', 'ConfigController@check_minimum_by_company');
 
-Route::post('/login', 'AuthController@login')->name('login');
-Route::post('/logout', 'AuthController@logout');
-Route::get('/users/logged_in_user', 'UserController@loggedInUser');
-Route::get('/users/select_list', 'UserController@user_select_list');
+ //Patient Charges
+
+ Route::post('/patient_charges', 'PatientChargesController@create_charges');
+
+ // Employee
+
+Route::get('/employees', 'EmployeeController@index');
+Route::post('/employee', 'EmployeeController@store');
+Route::put('/employee/{id}', 'EmployeeController@update');
+Route::get('/employee_select_list', 'EmployeeController@employee_select_list');
+
+// Daily Wages
+
+Route::get('/daily_wages', 'DailyWagesController@index');
+Route::post('/daily_wages', 'DailyWagesController@store');
+Route::put('/daily_wages/{id}', 'DailyWagesController@update');
+
+// Daily Expenses
+
+Route::get('/daily_expenses', 'DailyExpensesController@index');
+Route::post('/daily_expense', 'DailyExpensesController@store');
+Route::put('/daily_expense/{id}', 'DailyExpensesController@update');
+
+
+

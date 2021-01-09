@@ -369,14 +369,14 @@ class ReportingController extends Controller
         //check product near to end
 
         $data = array();
-        $qty = Config::first()->check_qty;
-        $product = Inventory::with('quantity_history')->get();
-        foreach ($product as $i) {
+        $inv = Inventory::with('quantity_history')->get();
+        foreach($inv as $i){
             $check = 0;
-            foreach ($i['quantity_history'] as $q) {
-                $check = $check + (int) ($q['qty']);
+            $min_qty = $i->min_qty;
+            foreach($i['quantity_history'] as $q){
+                $check = $check + (int)($q['qty']);
             }
-            if ($check < $qty) {
+            if($check < $min_qty){
                 $data[] = $i;
             }
         }

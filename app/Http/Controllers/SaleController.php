@@ -8,6 +8,7 @@ use App\Models\AppReturnModels\ReturnQuantity;
 use App\Models\AppSaleModels\PurchasedQuantity;
 use App\Models\AppSaleModels\Sale;
 use App\Models\AppSaleModels\SaleItems;
+use App\Models\AppPatientChargesModels\PatientCharges;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -64,6 +65,15 @@ class SaleController extends Controller
                     $m_qty->save();
                 }
             }
+        }
+        if($request->charges > 0) {
+            $charges = PatientCharges::create(
+                [
+                    'payment' => $request->charges,
+                    'timestamp' => Carbon::now('+5 hours'),
+                    'sale_id' => $sale->id
+                ]
+            );
         }
         return response()->json($sale, 200);
     }
